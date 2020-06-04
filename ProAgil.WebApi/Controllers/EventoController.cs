@@ -77,7 +77,7 @@ namespace ProAgil.WebApi.Controllers
             return BadRequest();                   
         }
 
-        [HttpPut]
+        [HttpPut("{EventoId}")]
         public async Task<IActionResult> Put(int EventoId,Evento model)
         {
             try
@@ -98,12 +98,12 @@ namespace ProAgil.WebApi.Controllers
             return BadRequest("Não foi possivel salvar o evento!");                   
         }
 
-        [HttpDelete]
+        [HttpDelete("{EventoId}")]
         public async Task<IActionResult> Delete(int EventoId)
         {
             try
             {
-                var evento = _repo.GetEventosAsyncById(EventoId, false);
+                var evento = await _repo.GetEventosAsyncById(EventoId, false);
                 if(evento == null) return NotFound();
                 
                 _repo.Delete(evento);
@@ -113,10 +113,10 @@ namespace ProAgil.WebApi.Controllers
             }
             catch (System.Exception)
             {                
-                return this.StatusCode(StatusCodes.Status500InternalServerError, "Banco de dados Falhou!!");
+                return this.StatusCode(StatusCodes.Status500InternalServerError, "Banco de dados Falhou!!");            
             }     
 
-            return BadRequest("Não foi possivel salvar o evento!");                   
+            return BadRequest("Não foi possivel deletar o evento!");                   
         }
 
     }

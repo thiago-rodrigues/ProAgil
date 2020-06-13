@@ -1,8 +1,10 @@
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ProAgil.Domain;
 using ProAgil.Repository;
+using ProAgil.WebApi.Dtos;
 
 namespace ProAgil.WebApi.Controllers
 {
@@ -11,24 +13,28 @@ namespace ProAgil.WebApi.Controllers
     public class EventoController : ControllerBase
     {
         private readonly IProAgilRepository _repo;
+        private readonly IMapper _mapper;
 
-        public EventoController(IProAgilRepository repo)
+        public EventoController(IProAgilRepository repo, IMapper mapper)
         {
+            _mapper = mapper;
             _repo = repo;
         }
-        
+
         [HttpGet]
         public async Task<IActionResult> Get()
         {
             try
             {
-                var results = await _repo.GetAllEventosAsync(true);
+                var eventos = await _repo.GetAllEventosAsync(true);
+                var results = _mapper.Map<EventoDto[]>(eventos);
+
                 return Ok(results);
             }
-            catch (System.Exception)
-            {                
-                return this.StatusCode(StatusCodes.Status500InternalServerError, "Banco de dados Falhou!!");
-            }                        
+            catch (System.Exception ex)
+            {
+                return this.StatusCode(StatusCodes.Status500InternalServerError, $"Banco de dados Falhou!! {ex}");
+            }
         }
 
         [HttpGet("{EventoId}")]
@@ -36,13 +42,14 @@ namespace ProAgil.WebApi.Controllers
         {
             try
             {
-                var results = await _repo.GetEventosAsyncById(EventoId, true);
+                var evento = await _repo.GetEventosAsyncById(EventoId, true);
+                var results = _mapper.Map<EventoDto>(evento);
                 return Ok(results);
             }
             catch (System.Exception)
-            {                
+            {
                 return this.StatusCode(StatusCodes.Status500InternalServerError, "Banco de dados Falhou!!");
-            }                        
+            }
         }
 
         [HttpGet("getByTema/{Tema}")]
@@ -54,48 +61,55 @@ namespace ProAgil.WebApi.Controllers
                 return Ok(results);
             }
             catch (System.Exception)
-            {                
+            {
                 return this.StatusCode(StatusCodes.Status500InternalServerError, "Banco de dados Falhou!!");
-            }                        
+            }
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post(Evento model)
+        public async Task<IActionResult> Post(EventoDto model)
         {
             try
             {
-                _repo.Add(model);
-                if(await _repo.SaveChangesAsync()){
-                     return Created($"/api/evento/{model.Id}", model);
-                }                
-            }
-            catch (System.Exception)
-            {                
-                return this.StatusCode(StatusCodes.Status500InternalServerError, "Banco de dados Falhou!!");
-            }     
+                var evento = _mapper.Map<Evento>(model);
 
-            return BadRequest();                   
+                _repo.Add(evento);
+
+                if (await _repo.SaveChangesAsync())
+                {
+                    return Created($"/api/evento/{model.Id}", _mapper.Map<EventoDto>(evento));
+                }
+            }
+            catch (System.Exception ex)
+            {
+                return this.StatusCode(StatusCodes.Status500InternalServerError, $"Banco de dados Falhou!! {ex.Message}");
+            }
+
+            return BadRequest();
         }
 
         [HttpPut("{EventoId}")]
-        public async Task<IActionResult> Put(int EventoId,Evento model)
+        public async Task<IActionResult> Put(int EventoId, EventoDto model)
         {
             try
             {
-                var evento = _repo.GetEventosAsyncById(EventoId, false);
-                if(evento == null) return NotFound();
+                var evento = await _repo.GetEventosAsyncById(EventoId, false);
+                if (evento == null) return NotFound();
 
-                _repo.Update(model);
-                if(await _repo.SaveChangesAsync()){
-                     return Created($"/api/evento/{model.Id}", model);
-                }                
+                _mapper.Map(model, evento);
+
+                _repo.Update(evento);
+                if (await _repo.SaveChangesAsync())
+                {
+                    return Created($"/api/evento/{model.Id}", _mapper.Map<EventoDto>(evento));
+                }
             }
             catch (System.Exception)
-            {                
+            {
                 return this.StatusCode(StatusCodes.Status500InternalServerError, "Banco de dados Falhou!!");
-            }     
+            }
 
-            return BadRequest("Não foi possivel salvar o evento!");                   
+            return BadRequest("Não foi possivel salvar o evento!");
         }
 
         [HttpDelete("{EventoId}")]
@@ -104,19 +118,20 @@ namespace ProAgil.WebApi.Controllers
             try
             {
                 var evento = await _repo.GetEventosAsyncById(EventoId, false);
-                if(evento == null) return NotFound();
-                
+                if (evento == null) return NotFound();
+
                 _repo.Delete(evento);
-                if(await _repo.SaveChangesAsync()){
-                     return Ok();
-                }                
+                if (await _repo.SaveChangesAsync())
+                {
+                    return Ok();
+                }
             }
             catch (System.Exception)
-            {                
-                return this.StatusCode(StatusCodes.Status500InternalServerError, "Banco de dados Falhou!!");            
-            }     
+            {
+                return this.StatusCode(StatusCodes.Status500InternalServerError, "Banco de dados Falhou!!");
+            }
 
-            return BadRequest("Não foi possivel deletar o evento!");                   
+            return BadRequest("Não foi possivel deletar o evento!");
         }
 
     }

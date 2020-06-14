@@ -6,6 +6,8 @@ import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { defineLocale} from 'ngx-bootstrap/chronos';
 import { ptBrLocale } from 'ngx-bootstrap/locale';
 import { BsDatepickerConfig, BsLocaleService } from 'ngx-bootstrap/datepicker';
+import { ToastrService } from 'ngx-toastr';
+
 defineLocale('pt-br', ptBrLocale);
 
 @Component({
@@ -14,7 +16,7 @@ defineLocale('pt-br', ptBrLocale);
   styleUrls: ['./eventos.component.css']
 })
 export class EventosComponent implements OnInit {
-
+  titulo = 'Eventos';
   eventosFiltrados: Evento[];
   eventos: Evento[];
   evento: Evento;
@@ -31,7 +33,8 @@ export class EventosComponent implements OnInit {
       private eventoService: EventoService,
       private modalService: BsModalService,
       private fb: FormBuilder,
-      private localeService: BsLocaleService
+      private localeService: BsLocaleService,
+      private toastr: ToastrService
     ) {
       this.localeService.use('pt-br');
     }
@@ -112,8 +115,10 @@ export class EventosComponent implements OnInit {
       () => {
           template.hide();
           this.getEventos();
+          this.toastr.success('Deletado com Sucesso!', 'Deletando Evento');
         }, error => {
           console.log(error);
+          this.toastr.error(`Erro ao tentar deletar evento! ${error} `, 'Deletando Evento');
         }
     );
   }
@@ -126,8 +131,10 @@ export class EventosComponent implements OnInit {
               (novoEvento: Evento) => {
                 template.hide();
                 this.getEventos();
+                this.toastr.success('Inserido com Sucesso!', 'Inserindo Evento');
               }, error => {
                 console.log(error);
+                this.toastr.error(`Erro ao tentar inserir evento! ${error}`, 'Inserindo Evento');
               }
           );
         } else{
@@ -136,8 +143,10 @@ export class EventosComponent implements OnInit {
               () => {
                 template.hide();
                 this.getEventos();
+                this.toastr.success('Editado com Sucesso!', 'Editando Evento');
               }, error => {
                 console.log(error);
+                this.toastr.error(`Erro ao tentar editar evento! ${error}`, 'Editando Evento');
               }
           );
         }
@@ -150,7 +159,7 @@ export class EventosComponent implements OnInit {
       this.eventosFiltrados = this.eventos;
       console.log(this.eventos);
     }, error => {
-      console.log(error);
+      this.toastr.error(`Erro ao tentar carregar eventos! ${error}`, 'Carregando Eventos');
     });
   }
 

@@ -8,6 +8,7 @@ import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { AppRoutingModule } from './app-routing.module';
+import { ToastrModule } from 'ngx-toastr';
 
 import { EventoService } from './_services/evento.service';
 
@@ -19,6 +20,10 @@ import { NavComponent } from './nav/nav.component';
 import { DateTimeFormatPipePipe } from './_helpers/DateTimeFormatPipe.pipe';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { FooterComponent } from './footer/footer.component';
+import { PalestrantesComponent } from './palestrantes/palestrantes.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
+import { ContatosComponent } from './contatos/contatos.component';
+import { TituloComponent} from './_shared/titulo/titulo.component';
 
 
 @NgModule({
@@ -28,7 +33,11 @@ import { FooterComponent } from './footer/footer.component';
       NavComponent,
       DateTimeFormatPipePipe,
       SidebarComponent,
-      FooterComponent
+      FooterComponent,
+      PalestrantesComponent,
+      DashboardComponent,
+      ContatosComponent,
+      TituloComponent
    ],
    imports: [
       BrowserAnimationsModule,
@@ -37,6 +46,7 @@ import { FooterComponent } from './footer/footer.component';
       BsDatepickerModule.forRoot(),
       TooltipModule.forRoot(),
       ModalModule.forRoot(),
+      ToastrModule.forRoot(),
       AppRoutingModule,
       HttpClientModule,
       FormsModule,

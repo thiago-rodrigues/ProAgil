@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
@@ -9,7 +10,7 @@ namespace ProAgil.WebApi.Dtos
         [Required (ErrorMessage="Campo Obrigatório")]
         [StringLength (100, MinimumLength=3, ErrorMessage="A quantidade de caracteres deve estar entre 3 e 100")]
         public string Local { get; set; }   
-        public string DataEvento { get; set; }
+        public DateTime DataEvento { get; set; }
         [Required (ErrorMessage="O Tema deve ser preenchido!")]
         public string  Tema { get; set; }
         

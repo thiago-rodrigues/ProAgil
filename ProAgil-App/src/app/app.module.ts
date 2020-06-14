@@ -17,6 +17,8 @@ import { isSyntheticPropertyOrListener } from '@angular/compiler/src/render3/uti
 import { NavComponent } from './nav/nav.component';
 
 import { DateTimeFormatPipePipe } from './_helpers/DateTimeFormatPipe.pipe';
+import { SidebarComponent } from './sidebar/sidebar.component';
+import { FooterComponent } from './footer/footer.component';
 
 
 @NgModule({
@@ -24,7 +26,9 @@ import { DateTimeFormatPipePipe } from './_helpers/DateTimeFormatPipe.pipe';
       AppComponent,
       EventosComponent,
       NavComponent,
-      DateTimeFormatPipePipe
+      DateTimeFormatPipePipe,
+      SidebarComponent,
+      FooterComponent
    ],
    imports: [
       BrowserAnimationsModule,

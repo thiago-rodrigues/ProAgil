@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import * as $ from 'jquery';
 
 @Component({
   selector: 'app-nav',
@@ -12,4 +13,8 @@ export class NavComponent implements OnInit {
   ngOnInit() {
   }
 
+  AlterarMenu() {
+    $('body').toggleClass('sidebar-toggled');
+    $('.sidebar').toggleClass('toggled');
+  }
 }

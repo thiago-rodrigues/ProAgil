@@ -1,4 +1,4 @@
-import { Component, OnInit, TemplateRef } from '@angular/core';
+import { Component, OnInit, TemplateRef, Output, EventEmitter } from '@angular/core';
 import { EventoService } from '../_services/evento.service';
 import { Evento } from '../_models/Evento';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
@@ -7,6 +7,7 @@ import { defineLocale} from 'ngx-bootstrap/chronos';
 import { ptBrLocale } from 'ngx-bootstrap/locale';
 import { BsDatepickerConfig, BsLocaleService } from 'ngx-bootstrap/datepicker';
 import { ToastrService } from 'ngx-toastr';
+
 
 defineLocale('pt-br', ptBrLocale);
 
@@ -28,6 +29,7 @@ export class EventosComponent implements OnInit {
   formulario: FormGroup;
   modoSalvar = 'post';
   bodyDeletarEvento = '';
+  @Output() enviaFlocal = new EventEmitter();
 
   constructor(
       private eventoService: EventoService,
@@ -40,6 +42,7 @@ export class EventosComponent implements OnInit {
     }
 
   get flocal(): string{
+    this.enviaFlocal.emit(this._fLocal);
     return this._fLocal;
   }
   set flocal(value: string){

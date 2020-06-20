@@ -1,5 +1,4 @@
-import { Component, OnInit } from '@angular/core';
-import * as $ from 'jquery';
+import { Component, OnInit, Input } from '@angular/core';
 
 @Component({
   selector: 'app-sidebar',
@@ -8,6 +7,8 @@ import * as $ from 'jquery';
 })
 export class SidebarComponent implements OnInit {
 
+  @Input() toggled = false;
+
   constructor() { }
 
   ngOnInit() {
@@ -15,8 +16,7 @@ export class SidebarComponent implements OnInit {
   }
 
   AlterarMenu() {
-    $('body').toggleClass('sidebar-toggled');
-    $('.sidebar').toggleClass('toggled');
+    this.toggled = !this.toggled;
   }
 
 }

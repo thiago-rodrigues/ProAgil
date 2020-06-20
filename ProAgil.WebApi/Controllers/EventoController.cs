@@ -1,3 +1,4 @@
+using System.IO;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
@@ -36,6 +37,8 @@ namespace ProAgil.WebApi.Controllers
                 return this.StatusCode(StatusCodes.Status500InternalServerError, $"Banco de dados Falhou!! {ex}");
             }
         }
+
+        
 
         [HttpGet("{EventoId}")]
         public async Task<IActionResult> Get(int EventoId)

@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import * as $ from 'jquery';
+import { EventEmitter } from 'protractor';
 
 @Component({
   selector: 'app-nav',
@@ -7,14 +8,14 @@ import * as $ from 'jquery';
   styleUrls: ['./nav.component.css']
 })
 export class NavComponent implements OnInit {
-
+  @Input() flocal: any;
+  toggled = false;
   constructor() { }
 
   ngOnInit() {
   }
 
   AlterarMenu() {
-    $('body').toggleClass('sidebar-toggled');
-    $('.sidebar').toggleClass('toggled');
+    this.toggled = !this.toggled;
   }
 }
